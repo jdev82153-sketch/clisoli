@@ -1,7 +1,3 @@
-/* =========================
-   CLISOLI — JAVASCRIPT
-========================= */
-
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================
@@ -14,23 +10,70 @@ document.addEventListener("DOMContentLoaded", () => {
   if (menuBtn && menu) {
 
     menuBtn.addEventListener("click", () => {
+
       menu.classList.toggle("active");
 
-      if (menu.classList.contains("active")) {
-        menuBtn.textContent = "✕";
-      } else {
-        menuBtn.textContent = "☰";
-      }
+      menuBtn.textContent =
+        menu.classList.contains("active")
+          ? "✕"
+          : "☰";
+
     });
 
-    const menuLinks = menu.querySelectorAll("a");
+    menu.querySelectorAll("a").forEach(link => {
 
-    menuLinks.forEach(link => {
       link.addEventListener("click", () => {
+
         menu.classList.remove("active");
+
         menuBtn.textContent = "☰";
+
       });
+
     });
+
+  }
+
+
+  /* =========================
+     MODO CLARO / ESCURO
+  ========================= */
+
+  const themeBtn = document.getElementById("themeBtn");
+
+  const savedTheme =
+    localStorage.getItem("clisoli-theme");
+
+  if (savedTheme === "dark") {
+
+    document.documentElement.classList.add("dark");
+
+    if (themeBtn) {
+      themeBtn.textContent = "☀️";
+    }
+
+  }
+
+
+  if (themeBtn) {
+
+    themeBtn.addEventListener("click", () => {
+
+      document.documentElement.classList.toggle("dark");
+
+      const dark =
+        document.documentElement.classList.contains("dark");
+
+      localStorage.setItem(
+        "clisoli-theme",
+        dark ? "dark" : "light"
+      );
+
+      themeBtn.textContent =
+        dark ? "☀️" : "🌙";
+
+    });
+
   }
 
 
@@ -46,11 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================
-     ANIMAÇÕES AO ROLAR
+     ANIMAÇÕES
   ========================= */
 
   const elements = document.querySelectorAll(
-    ".section-heading, .card, .combo-card, .gallery-item, .contact-item, .section-image, .section-text"
+    ".section-heading, .card, .combo-card, .gallery-item, .contact-item, .catalog, .section-text"
   );
 
   elements.forEach(element => {
@@ -58,23 +101,27 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  const observer = new IntersectionObserver(
-    entries => {
+  const observer =
+    new IntersectionObserver(
+      entries => {
 
-      entries.forEach(entry => {
+        entries.forEach(entry => {
 
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          observer.unobserve(entry.target);
-        }
+          if (entry.isIntersecting) {
 
-      });
+            entry.target.classList.add("visible");
 
-    },
-    {
-      threshold: 0.12
-    }
-  );
+            observer.unobserve(entry.target);
+
+          }
+
+        });
+
+      },
+      {
+        threshold: 0.12
+      }
+    );
 
 
   elements.forEach(element => {
@@ -83,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================
-     FECHAR MENU AO REDIMENSIONAR
+     REDIMENSIONAMENTO
   ========================= */
 
   window.addEventListener("resize", () => {
